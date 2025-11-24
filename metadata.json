@@ -1,0 +1,5 @@
+{
+  "name": "Neon Brick Breaker AI",
+  "description": "A classic retro arcade brick breaking game featuring stunning neon aesthetics and AI-powered level generation using Google Gemini.",
+  "requestFramePermissions": []
+}

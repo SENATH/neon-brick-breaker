@@ -9,7 +9,7 @@ WORKDIR /app
 
 # 
 COPY package.json /app/package.json
-COPY package-lock.json /app/package-lock.json
+# COPY package-lock.json /app/package-lock.json
 
 # Same as npm install
 RUN npm ci

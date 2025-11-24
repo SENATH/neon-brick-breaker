@@ -1,0 +1,63 @@
+apiVersion: openchoreo.dev/v1alpha1
+kind: Component
+metadata:
+  name: neon-brick-breaker
+spec:
+  owner:
+    projectName: default
+
+  # References the ComponentType
+  componentType: deployment/web-application
+
+  autoDeploy: true
+
+  # Workflow configuration (developer-provided)
+  workflow:
+    # Reference to Workflow
+    name: react
+
+    # Schema matching the Workflow's schema section
+    schema:
+      # Nested structure from schema
+      repository:
+        url: "https://github.com/SENATH/neon-brick-breaker"
+        revision:
+          branch: "main"
+          commit: ""
+        appPath: "/"
+      nodeVersion: "20"
+
+  parameters:
+    replicas: 2
+    port: 80
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "256Mi"
+      limits:
+        cpu: "500m"
+        memory: "512Mi"
+
+---
+apiVersion: openchoreo.dev/v1alpha1
+kind: WorkflowRun
+metadata:
+  name: neon-brick-breaker-build-01
+spec:
+  # Ownership tracking for the workflow execution
+  owner:
+    projectName: default
+    componentName: neon-brick-breaker
+
+  workflow:
+    # Reference to Workflow
+    name: react
+
+    schema:
+      repository:
+        url: "https://github.com/SENATH/neon-brick-breaker"
+        revision:
+          branch: "main"
+          commit: ""
+        appPath: "/"
+      nodeVersion: "20"

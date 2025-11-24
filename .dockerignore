@@ -1,5 +1,6 @@
 node_modules
 npm-debug.log
+neon-brick-breaker-app.yaml
 build
 .dockerignore
 **/.git

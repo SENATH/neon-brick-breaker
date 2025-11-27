@@ -1,59 +1,40 @@
-
-# syntax=docker/dockerfile:1.4
-
-# 1. For build React app
-FROM node:lts AS development
+# Stage 1: Build the application
+FROM node:alpine AS builder
 
 # Set working directory
 WORKDIR /app
 
-# 
-COPY package.json /app/package.json
-# COPY package-lock.json /app/package-lock.json
+# Copy package files first to leverage Docker cache
+COPY package.json package-lock.json* ./
 
-# Same as npm install
-RUN npm ci
+# Install dependencies
+RUN npm install
 
-COPY . /app
+# Copy the rest of the application code
+COPY . .
 
-ENV CI=true
-ENV PORT=3000
+# Build arguments for environment variables
+# Note: Vite apps usually require variables to start with VITE_ to be exposed to the client
+ARG GEMINI_API_KEY
+ENV VITE_GEMINI_API_KEY=$GEMINI_API_KEY
 
-CMD [ "npm", "start" ]
-
-FROM development AS build
-
+# Build the app (outputs to /app/dist)
 RUN npm run build
 
-
-FROM development as dev-envs
-RUN <<EOF
-apt-get update
-apt-get install -y --no-install-recommends git
-EOF
-
-RUN <<EOF
-useradd -s /bin/bash -m vscode
-groupadd docker
-usermod -aG docker vscode
-EOF
-# install Docker tools (cli, buildx, compose)
-COPY --from=gloursdocker/docker / /
-CMD [ "npm", "start" ]
-
-# 2. For Nginx setup
+# Stage 2: Serve the application
 FROM nginx:alpine
 
-# Copy config nginx
-COPY --from=build /app/.nginx/nginx.conf /etc/nginx/conf.d/default.conf
-
-WORKDIR /usr/share/nginx/html
-
 # Remove default nginx static assets
-RUN rm -rf ./*
+RUN rm -rf /usr/share/nginx/html/*
 
-# Copy static assets from builder stage
-COPY --from=build /app/build .
+# Copy the build output from the builder stage
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Containers run nginx with global directives and daemon off
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+# Copy custom Nginx configuration (see Step 2 below)
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Expose port 80
+EXPOSE 80
+
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]

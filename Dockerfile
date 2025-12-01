@@ -18,7 +18,7 @@ COPY . .
 ARG GEMINI_API_KEY
 ENV VITE_GEMINI_API_KEY=$GEMINI_API_KEY
 
-# Build the app (outputs to /app/dist)
+# Build the app (outputs to /app/build)
 RUN npm run build
 
 # Stage 2: Serve the application
@@ -28,7 +28,7 @@ FROM nginx:alpine
 RUN rm -rf /usr/share/nginx/html/*
 
 # Copy the build output from the builder stage
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app/build /usr/share/nginx/html
 
 # Copy custom Nginx configuration (see Step 2 below)
 COPY nginx.conf /etc/nginx/conf.d/default.conf

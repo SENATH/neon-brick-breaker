@@ -1,4 +1,4 @@
-apiVersion: openchoreo.dev/v1alpha1
+aapiVersion: openchoreo.dev/v1alpha1
 kind: Component
 metadata:
   name: neon-brick-breaker
@@ -11,20 +11,20 @@ spec:
 
   autoDeploy: true
 
-  # Workflow configuration (developer-provided)
+  # Component Workflow configuration (developer-provided)
   workflow:
-    # Reference to Workflow
+    # Reference to ComponentWorkflow
     name: react
 
-    # Schema matching the Workflow's schema section
-    schema:
-      # Nested structure from schema
+    # Required parameters required by the ComponentWorkflow
+    systemParameters:
       repository:
         url: "https://github.com/SENATH/neon-brick-breaker"
         revision:
           branch: "main"
-          commit: ""
-        appPath: "/"
+          # Optional commit hash, should be a valid git commit
+          # commit: ""
+        appPath: "/s"
       nodeVersion: "20"
 
   parameters:

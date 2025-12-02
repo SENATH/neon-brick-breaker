@@ -24,7 +24,11 @@ spec:
           branch: "main"
           # Optional commit hash, should be a valid git commit
           # commit: ""
-        appPath: "/s"
+        appPath: "/"
+
+    # Developer-configurable parameters (defined by PE, passed to build plane resource)
+    parameters:
+      nodeVersion: "24"
 
   parameters:
     replicas: 2
@@ -39,24 +43,29 @@ spec:
 
 ---
 apiVersion: openchoreo.dev/v1alpha1
-kind: WorkflowRun
+kind: ComponentWorkflowRun
 metadata:
   name: neon-brick-breaker-build-01
 spec:
-  # Ownership tracking for the workflow execution
+  # Ownership tracking for the component workflow execution (required)
   owner:
     projectName: default
     componentName: neon-brick-breaker
 
   workflow:
-    # Reference to Workflow
+    # Reference to ComponentWorkflow
     name: react
 
-    schema:
+    # Required system parameters
+    systemParameters:
       repository:
         url: "https://github.com/SENATH/neon-brick-breaker"
         revision:
           branch: "main"
-          commit: ""
+          # Optional commit hash, should be a valid git commit
+          # commit: "" 
         appPath: "/"
-      nodeVersion: "20"
+
+    # Developer-configurable parameters (defined by PE, passed to build plane resource)
+    parameters:
+      nodeVersion: "24"

@@ -25,7 +25,6 @@ spec:
           # Optional commit hash, should be a valid git commit
           # commit: ""
         appPath: "/s"
-      nodeVersion: "20"
 
   parameters:
     replicas: 2

@@ -1,4 +1,4 @@
-import { GoogleGenAI, Type, SchemaType } from "@google/genai";
+import { GoogleGenAI, Type } from "@google/genai";
 import { GeneratedLevelResponse } from '../types';
 import { BRICK_ROWS, BRICK_COLS } from '../constants';
 

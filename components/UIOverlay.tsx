@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { GameState } from '../types';
-import { DEFAULT_LEVEL_PROMPT } from '../constants';
-import { Loader2, Sparkles, Trophy, Skull, Play, LogOut } from 'lucide-react';
+import { Trophy, Skull, Play, LogOut } from 'lucide-react';
 
 interface UIOverlayProps {
   gameState: GameState;
@@ -9,7 +8,6 @@ interface UIOverlayProps {
   lives: number;
   onStartGame: () => void;
   onExitGame: () => void;
-  onGenerateLevel: (prompt: string) => void;
   currentTheme: string;
 }
 
@@ -19,23 +17,10 @@ const UIOverlay: React.FC<UIOverlayProps> = ({
   lives, 
   onStartGame,
   onExitGame,
-  onGenerateLevel,
   currentTheme
 }) => {
-  const [prompt, setPrompt] = useState(DEFAULT_LEVEL_PROMPT);
-
-  // HUD is always visible unless generating
-  const showHUD = gameState !== GameState.MENU && gameState !== GameState.GENERATING_LEVEL;
-
-  if (gameState === GameState.GENERATING_LEVEL) {
-    return (
-      <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-slate-900/90 backdrop-blur-sm text-white">
-        <Loader2 className="w-16 h-16 text-blue-500 animate-spin mb-4" />
-        <h2 className="text-2xl font-arcade text-blue-400 mb-2">GENERATING LEVEL</h2>
-        <p className="text-slate-400">Consulting the AI architect...</p>
-      </div>
-    );
-  }
+  // HUD is always visible unless in Menu
+  const showHUD = gameState !== GameState.MENU;
 
   return (
     <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-6">
@@ -93,25 +78,6 @@ const UIOverlay: React.FC<UIOverlayProps> = ({
                   <Play className="fill-white" /> START GAME
                 </div>
               </button>
-
-              <div className="relative border-t border-slate-600 pt-6 mt-6">
-                <label className="block text-left text-sm font-bold text-slate-300 mb-2 flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-purple-400" />
-                  AI Level Generator
-                </label>
-                <textarea
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-sm text-slate-200 focus:ring-2 focus:ring-purple-500 focus:outline-none resize-none h-24 mb-3"
-                  placeholder="Describe a level (e.g., 'A giant skull shape with red bricks')"
-                />
-                <button 
-                  onClick={() => onGenerateLevel(prompt)}
-                  className="w-full py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-lg transition-colors flex items-center justify-center gap-2 text-sm"
-                >
-                  <Sparkles className="w-4 h-4" /> GENERATE & PLAY
-                </button>
-              </div>
             </div>
           </div>
         )}

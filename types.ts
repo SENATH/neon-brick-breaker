@@ -4,7 +4,6 @@ export enum GameState {
   GAME_OVER = 'GAME_OVER',
   VICTORY = 'VICTORY',
   PAUSED = 'PAUSED',
-  GENERATING_LEVEL = 'GENERATING_LEVEL',
 }
 
 export interface Vector2D {

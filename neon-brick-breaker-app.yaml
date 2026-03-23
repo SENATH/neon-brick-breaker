@@ -1,16 +1,7 @@
 # OpenChoreo Component manifest for Neon Brick Breaker
 # Compatible with OpenChoreo release v1.0 (v1alpha1 API)
 #
-# Changes from pre-1.0:
-#   - componentType is now an object with kind: ClusterComponentType
-#   - workflow.name updated to canonical paketo-buildpacks-builder
-#   - workflow.systemParameters moved to spec.parameters
-#   - runtime parameters (replicas, port, resources) removed from Component spec
-#   - namespace: default added to metadata
-#   - WorkflowRun kind renamed from ComponentWorkflowRun to WorkflowRun
-#   - WorkflowRun.spec.owner removed; ownership tracked via metadata.labels
-#   - workflow.kind: ClusterWorkflow added to WorkflowRun
-#   - buildEnv replaces the old nodeVersion parameter
+# Schema note: parameters must be nested inside spec.workflow, not at spec level.
 apiVersion: openchoreo.dev/v1alpha1
 kind: Component
 metadata:
@@ -29,25 +20,25 @@ spec:
   workflow:
     kind: ClusterWorkflow
     name: paketo-buildpacks-builder
-  parameters:
-    repository:
-      url: "https://github.com/SENATH/neon-brick-breaker"
-      revision:
-        branch: "main"
-      appPath: "/"
-    buildEnv:
-      - name: BP_NODE_RUN_SCRIPTS
-        value: "build"
-      - name: BP_WEB_SERVER
-        value: "nginx"
-      - name: BP_WEB_SERVER_ROOT
-        value: "build"
-      - name: BP_WEB_SERVER_ENABLE_PUSH_STATE
-        value: "true"
-      - name: BP_NODE_VERSION
-        value: "24"
-      - name: PORT
-        value: "80"
+    parameters:
+      repository:
+        url: "https://github.com/SENATH/neon-brick-breaker"
+        revision:
+          branch: "main"
+        appPath: "/"
+      buildEnv:
+        - name: BP_NODE_RUN_SCRIPTS
+          value: "build"
+        - name: BP_WEB_SERVER
+          value: "nginx"
+        - name: BP_WEB_SERVER_ROOT
+          value: "build"
+        - name: BP_WEB_SERVER_ENABLE_PUSH_STATE
+          value: "true"
+        - name: BP_NODE_VERSION
+          value: "24"
+        - name: PORT
+          value: "80"
 
 ---
 apiVersion: openchoreo.dev/v1alpha1
@@ -61,22 +52,22 @@ spec:
   workflow:
     kind: ClusterWorkflow
     name: paketo-buildpacks-builder
-  parameters:
-    repository:
-      url: "https://github.com/SENATH/neon-brick-breaker"
-      revision:
-        branch: "main"
-      appPath: "/"
-    buildEnv:
-      - name: BP_NODE_RUN_SCRIPTS
-        value: "build"
-      - name: BP_WEB_SERVER
-        value: "nginx"
-      - name: BP_WEB_SERVER_ROOT
-        value: "build"
-      - name: BP_WEB_SERVER_ENABLE_PUSH_STATE
-        value: "true"
-      - name: BP_NODE_VERSION
-        value: "24"
-      - name: PORT
-        value: "80"
+    parameters:
+      repository:
+        url: "https://github.com/SENATH/neon-brick-breaker"
+        revision:
+          branch: "main"
+        appPath: "/"
+      buildEnv:
+        - name: BP_NODE_RUN_SCRIPTS
+          value: "build"
+        - name: BP_WEB_SERVER
+          value: "nginx"
+        - name: BP_WEB_SERVER_ROOT
+          value: "build"
+        - name: BP_WEB_SERVER_ENABLE_PUSH_STATE
+          value: "true"
+        - name: BP_NODE_VERSION
+          value: "24"
+        - name: PORT
+          value: "80"
